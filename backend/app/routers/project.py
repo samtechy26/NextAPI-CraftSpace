@@ -39,6 +39,7 @@ async def get_projects():
 async def add_project(
     title: str = Form("title"),
     description: str = Form("description"),
+    category: str = Form("Category"),
     link: str = Form("project link"),
     image: UploadFile = File(...),
     tags: str = Form("tags"),
@@ -54,6 +55,7 @@ async def add_project(
     project = ProjectBaseModel(
         title=title,
         description=description,
+        category=category,
         link=link,
         image=url,
         tags=tags,

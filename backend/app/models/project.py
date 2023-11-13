@@ -10,6 +10,7 @@ class Tags(str, Enum):
 class ProjectBaseModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias='_id', default=None)
     title: str = Field("Google Health Platform")
+    category: str = Field("Web Application")
     description: str = Field("A basic health Application")
     tags: Optional[str] = None
     link: str = Field("...")
