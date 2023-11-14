@@ -23,8 +23,11 @@ router = APIRouter(prefix="/projects", tags=["projects"])
             response_description="View all projects",
             status_code=status.HTTP_200_OK
             )
-async def get_projects():
+async def get_projects(category: str = None):
+
     query = project_collection.find()
+    if category:
+        query = project_collection.find({"category": category})
     result = [ProjectBaseModel(**raw_data) async for raw_data in query]
     return result
 

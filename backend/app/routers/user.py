@@ -1,7 +1,19 @@
-from fastapi import APIRouter, Body, Request, status, HTTPException, Depends, UploadFile, File, Form
+from fastapi import (
+    APIRouter,
+    Body,
+    Request,
+    status,
+    HTTPException,
+    Depends,
+    UploadFile,
+    File,
+    Form,
+)
 from typing import List
-from ..models.user import ProfileModel, UserModel
+from pydantic import Field
+from ..models.user import ProfileModel, UserModel, UserLogin
 from ..authentication import Authorization
+from fastapi.responses import JSONResponse
 from ..database import user_collection, profile_collection
 import cloudinary
 import cloudinary.uploader
@@ -45,21 +57,36 @@ async def register(newUser: UserModel = Body(...)):
     return created_user
 
 
-# Add a new car  using forms
-@router.post("/",
-            response_description="Add new car with picture",
-            response_model=ProfileModel,
-            status_code=status.HTTP_201_CREATED,
-            )
-async def create_car_form(profile: ProfileModel = Form(),userId = Depends(auth_handler.auth_wrapper)):
+@router.post(
+    "/",
+    response_model=ProfileModel
+)
+async def create_profile(
+    profile: ProfileModel = Body(...), userId=Depends(auth_handler.auth_wrapper)
+):
     profile.owner = userId
-    new_profile = await profile_collection.insert_one(profile.model_dump(exclude='id', by_alias=True))
-    created_profile = await profile_collection.find_one({"_id": new_profile.inserted_id})
+    new_profile = await profile_collection.insert_one(
+        profile.model_dump(exclude="id", by_alias=True)
+    )
+    created_profile = await profile_collection.find_one(
+        {"_id": new_profile.inserted_id}
+    )
     return created_profile
 
 
+@router.post("/login", response_description="Login user")
+async def login(loginUser: UserLogin = Body(...)):
+    user = await user_collection.find_one({"username": loginUser.username})
+    if user is None or (
+        not auth_handler.verify_password(loginUser.password, user["password"])
+    ):
+        raise HTTPException(status_code=401, detail="Invalid username and/or password")
+    token = auth_handler.encode_token(user["username"])
+    response = JSONResponse(content={"token": token})
+    return response
 
-# Return User Details
 @router.get("/me")
-async def get_user_info():
-    pass
+async def me(username: str):
+    user_profile = await profile_collection.find_one({"username": username})
+    return user_profile
+

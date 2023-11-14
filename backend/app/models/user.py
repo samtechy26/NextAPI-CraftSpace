@@ -29,15 +29,20 @@ class ExperienceModel(BaseModel):
     end_year: int = Field()
     on_going: bool = Field()
 
-class ProfileModel(BaseModel):
-    owner: str = Field
+class ProfileModel(UserModel):
+    owner: str = Field()
+    image: Optional[str] = None
     first_name: str = Field()
     last_name: str = Field()
     experience: int = Field()
     bio: str = Field()
-    services: List[ServiceModel] 
-    languages: List[LanguageModel] 
-    education: List[EducationModel]
-    experiences: List[ExperienceModel]
+    services: list[ServiceModel]
+    languages: list[LanguageModel]
+    education: list[EducationModel]
+    experiences: list[ExperienceModel]
+
+class UserLogin(BaseModel):
+    username: str = Field(...)
+    password: str = Field(...)
 
 

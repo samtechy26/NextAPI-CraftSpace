@@ -5,12 +5,10 @@ const selectOptions = [
 	'Branding',
 ];
 
-function ProjectsFilter({ setSelectProject }) {
+function ProjectsFilter({setSelectOption}) {
 	return (
 		<select
-			onChange={(e) => {
-				setSelectProject(e.target.value);
-			}}
+			onChange={setSelectOption}
 			className="
                 px-4
                 sm:px-6
@@ -27,12 +25,12 @@ function ProjectsFilter({ setSelectProject }) {
                 dark:text-ternary-light
             "
 		>
-			<option value={setSelectProject} className="text-sm sm:text-md">
+			<option value='' className="text-sm sm:text-md">
 				All Projects
 			</option>
 
 			{selectOptions.map((option) => (
-				<option className="text-normal sm:text-md" key={option}>
+				<option className="text-normal sm:text-md" key={option} value={option}>
 					{option}
 				</option>
 			))}
