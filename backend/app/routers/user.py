@@ -11,7 +11,13 @@ from fastapi import (
 )
 from typing import List
 from pydantic import Field
-from ..models.user import ProfileModel, UserModel, UserLogin
+from ..models.user import (
+    ProfileModel,
+    UserModel,
+    UserLogin,
+    UploadProfile,
+    ProfileUpdate,
+)
 from ..authentication import Authorization
 from fastapi.responses import JSONResponse
 from ..database import user_collection, profile_collection
@@ -57,16 +63,16 @@ async def register(newUser: UserModel = Body(...)):
     return created_user
 
 
-@router.post(
-    "/",
-    response_model=ProfileModel
-)
+# Create Profile
+@router.post("/", response_model=ProfileModel)
 async def create_profile(
     profile: ProfileModel = Body(...), userId=Depends(auth_handler.auth_wrapper)
 ):
     profile.owner = userId
     new_profile = await profile_collection.insert_one(
-        profile.model_dump(exclude="id", by_alias=True)
+        profile.model_dump(
+            exclude=["id", "email", "username", "password"], by_alias=True
+        )
     )
     created_profile = await profile_collection.find_one(
         {"_id": new_profile.inserted_id}
@@ -74,6 +80,7 @@ async def create_profile(
     return created_profile
 
 
+# Login User
 @router.post("/login", response_description="Login user")
 async def login(loginUser: UserLogin = Body(...)):
     user = await user_collection.find_one({"username": loginUser.username})
@@ -85,8 +92,54 @@ async def login(loginUser: UserLogin = Body(...)):
     response = JSONResponse(content={"token": token})
     return response
 
-@router.get("/me")
+
+# Get profile information
+@router.get("/me", response_model=ProfileModel, response_description="Get User Profile")
 async def me(username: str):
-    user_profile = await profile_collection.find_one({"username": username})
+    user_profile = await profile_collection.find_one({"owner": username})
     return user_profile
 
+
+# Update profile
+@router.put("/update/data")
+async def update_profile_data(
+    data: ProfileUpdate = Body(...), username=Depends(auth_handler.auth_wrapper)
+):
+    profile = await profile_collection.find_one({"owner": username})
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Profile not available")
+
+    updated_data = data.model_dump(exclude_unset=True)
+
+    updated_profile = await profile_collection.update_one(
+        {"owner": username}, {"$set": updated_data}
+    )
+    if updated_profile.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Field not updated")
+    return {"message": "Fields updated successfully"}
+
+
+# Update  profile picture
+@router.put("/upload/profile")
+async def upload_profile_pic(
+    img: UploadFile = File(...), username=Depends(auth_handler.auth_wrapper)
+):
+    result = cloudinary.uploader.upload(
+        img.file, folder="PROFILES", crop="scale", width=800
+    )
+    url = result.get("url")
+    profile = await profile_collection.find_one({"owner": username})
+
+    if profile is None:
+        raise HTTPException(status_code=404, detail="profile is not available")
+
+    # Update the field in the document
+    updated_profile = await profile_collection.update_one(
+        {"owner": username},
+        {"$set": {"image": url}},
+    )
+
+    if updated_profile.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Field not updated")
+
+    return {"message": "Field updated successfully"}

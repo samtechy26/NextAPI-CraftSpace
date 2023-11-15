@@ -2,9 +2,23 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FiArrowDownCircle } from 'react-icons/fi';
 import useThemeSwitcher from '../../hooks/useThemeSwitcher';
+import { useState, useEffect } from 'react';
 
 function AppBanner() {
 	const [activeTheme] = useThemeSwitcher();
+
+	const [aboutMe, setAboutMe] = useState({})
+
+
+	useEffect(() => {
+		fetch(`${process.env.NEXT_PUBLIC_API}/users/me?username=sammy`, {
+		  method: "GET",
+		})
+		  .then((response) => response.json())
+		  .then((json) => {
+			setAboutMe(json);
+		  });
+	  }, []);
 
 	return (
 		<motion.section
@@ -24,7 +38,7 @@ function AppBanner() {
 					}}
 					className="font-general-semibold text-2xl lg:text-3xl xl:text-4xl text-center sm:text-left text-ternary-dark dark:text-primary-light uppercase"
 				>
-					Hi, Iam Stoman
+					Hi, I am {aboutMe.firs_name} { aboutMe.last_name}
 				</motion.h1>
 				<motion.p
 					initial={{ opacity: 0 }}

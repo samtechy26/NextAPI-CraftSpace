@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
 import HireMeModal from '../HireMeModal';
-import logoLight from '../../public/images/logo-light.svg';
 import logoDark from '../../public/images/logo-dark.svg';
 import useThemeSwitcher from '../../hooks/useThemeSwitcher';
 
@@ -58,7 +57,7 @@ function AppHeader() {
 								/>
 							) : (
 								<Image
-									src={logoLight}
+									src={logoDark}
 									className="w-36 cursor-pointer"
 									alt="Dark Logo"
 									width={150}
