@@ -1,94 +1,69 @@
-# Next.js, React, TailwindCSS, FastAPI & MongoDB Portfolio Project
+# NextAPI CraftSpace
 
-A simple portfolio starter theme built with Next.js, React, Tailwind CSS, FastAPI, and MongoDB.
+Welcome to the Portfolio Web Application project! This full-stack web application is designed to showcase your skills, projects, and bio in a visually appealing and interactive manner. Built using Next.js, React, Tailwind CSS for the frontend, and FastAPI for the backend, this project provides a seamless and efficient experience.
 
+## Technologies Used
 
-## Demo URL
+- **Frontend:**
+  - Next.js: A React framework for building efficient and scalable web applications.
+  - React: A JavaScript library for building user interfaces.
+  - Tailwind CSS: A utility-first CSS framework for rapid UI development.
 
+- **Backend:**
+  - FastAPI: A modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
+  - MongoDB: A NoSQL database for storing and retrieving data efficiently.
 
 ## Features
 
--   Built with [Next.js](https://nextjs.org) and [React](https://reactjs.org)
--   FastAPI
--   MongoDB
--   [Tailwind CSS v3](https://tailwindcss.com)
--   Custom Hooks
--   Framer Motion Transitions & Animations
--   Reusable Components
--   Projects filter by category
--   Projects filter by search
--   Dark Mode
--   Smooth scroll
--   Counter
--   Dynamic forms
--   Back to top button
--   Download file button
--   Simple and responsive design
+- **Project Management:**
+  - Add, list, update, and delete projects with ease.
+  - View detailed information about each project.
 
-## Setup
+- **Bio Editing:**
+  - Edit your personal bio to keep it up-to-date.
 
-1. Make sure you have Node JS installed. If you don't have it:
+- **Resume Download:**
+  - Allow visitors to download your resume directly from the website.
 
--   [Download it from nodejs.org](https://nodejs.org)
--   [Install it using NVM ](https://github.com/nvm-sh/nvm)
--   If you're on Mac, Homebrew is a good option too:
+- **Contact Form:**
+  - Provide a beautifully styled web form for visitors to reach out to you.
 
-```
-brew install node
-```
+## Getting Started
 
-2. Clone the repo:
+To run the project locally, follow these steps:
 
-```
-git clone https://github.com/realstoman/nextjs-tailwindcss-portfolio.git
-```
-
-3. Open the project folder:
-
-```
-cd nextjs-tailwindcss-portfolio
-```
-
-4. Install packages and dependencies:
-
-```
-npm install
-```
-
-5. Start a local dev server at `http://localhost:3000`:
-
-```
-npm run dev
-```
-
-6. start backend server `http://localhost:8000`:
-
-```
-cd backend/app
-```
-
-7. Create virtual environment
-
-   ```
-   python -m venv venv
-   ```
-8. Install dependencies
-
-   ```
-   pip install -r requirements
+1. Clone the repository: `git clone https://github.com/yourusername/portfolio-app.git`
+2. Navigate to the project directory: `cd portfolio-app`
+3. Install dependencies:
+   ```bash
+   cd frontend
+   npm install
+   cd ../backend
+   pip install -r requirements.txt
    ```
 
-9. Start Server
+4. Set up MongoDB:
+   - Create a MongoDB database and update the connection string in the `backend/.env` file.
 
-    ```
-    uvicorn app.main:app --reload
-    ```
-    
+5. Run the application:
+   ```bash
+   cd frontend
+   npm run dev
+   cd ../backend
+   uvicorn app.main:app --reload
+   ```
 
-## Notes
+6. Access the application at `http://localhost:3000` in your browser.
 
--   Images from [Unsplash](https://unsplash.com)
--   Feel free to use it as your own portfolio
--   Contributions are welcome
+## Customize Your Portfolio
 
-### License
+1. Update the frontend components in the `frontend/app` directory to reflect your personal style and preferences.
+2. Modify the backend API routes in the `backend/app` directory to handle portfolio data according to your needs.
+
+## Contributions
+
+Contributions are welcome! If you have suggestions, improvements, or bug fixes, please create a new issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
