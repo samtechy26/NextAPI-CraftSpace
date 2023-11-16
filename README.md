@@ -32,8 +32,8 @@ Welcome to the Portfolio Web Application project! This full-stack web applicatio
 
 To run the project locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/yourusername/portfolio-app.git`
-2. Navigate to the project directory: `cd portfolio-app`
+1. Clone the repository: `git clone https://github.com/samtechy26/NextAPI-CraftSpace.git`
+2. Navigate to the project directory: `cd NextAPI-CraftSpace`
 3. Install dependencies:
    ```bash
    cd frontend
