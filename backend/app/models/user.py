@@ -61,6 +61,12 @@ class ProfileUpdate(BaseModel):
     first_name: str = None
     last_name: str = None
 
+class ContactForm(BaseModel):
+    full_name: str
+    email: str = EmailStr()
+    subject: str
+    message: str
+
  
 
 

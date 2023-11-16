@@ -1,14 +1,41 @@
+import { useState } from 'react';
 import Button from '../reusable/Button';
 import FormInput from '../reusable/FormInput';
 
 function ContactForm() {
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [subject, setSubject] = useState('')
+	const [message, setMessage] = useState('')
+	const [response, setResponse] = useState('')
+	const [loading, setLoading] = useState(false)
+
+	const handleForm = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API}/users/email`, {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({ full_name:name, email: email, subject: subject, message: message, subject: subject }),
+		});
+	
+		if (res.ok) {
+		  setLoading(false);
+		  setResponse("Message Sent");
+		}
+	  };
+
+
 	return (
 		<div className="w-full lg:w-1/2">
 			<div className="leading-loose">
+				{!loading && response && (
+				<div className="border border-green-600 w-2/3 p-10 text-center font-thin my-4 text-lg animate-pulse">
+					{response}
+				</div>
+				)}
 				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-					}}
+					onSubmit={handleForm}
 					className="max-w-xl m-4 p-6 sm:p-10 bg-secondary-light dark:bg-secondary-dark rounded-xl shadow-xl text-left"
 				>
 					<p className="font-general-medium text-primary-dark dark:text-primary-light text-2xl mb-8">
@@ -23,6 +50,7 @@ function ContactForm() {
 						inputName="name"
 						placeholderText="Your Name"
 						ariaLabelName="Name"
+						setValue={setName}
 					/>
 					<FormInput
 						inputLabel="Email"
@@ -32,6 +60,7 @@ function ContactForm() {
 						inputName="email"
 						placeholderText="Your email"
 						ariaLabelName="Email"
+						setValue={setEmail}
 					/>
 					<FormInput
 						inputLabel="Subject"
@@ -41,6 +70,7 @@ function ContactForm() {
 						inputName="subject"
 						placeholderText="Subject"
 						ariaLabelName="Subject"
+						setValue={setSubject}
 					/>
 
 					<div className="mt-6">
@@ -57,6 +87,7 @@ function ContactForm() {
 							cols="14"
 							rows="6"
 							aria-label="Message"
+							onChange={(e) => setMessage(e.target.value)}
 						></textarea>
 					</div>
 

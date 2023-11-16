@@ -7,6 +7,7 @@ from fastapi import (
     Depends,
     UploadFile,
     File,
+    BackgroundTasks,
     Form,
 )
 from typing import List
@@ -17,6 +18,7 @@ from ..models.user import (
     UserLogin,
     UploadProfile,
     ProfileUpdate,
+    ContactForm
 )
 from ..authentication import Authorization
 from fastapi.responses import JSONResponse
@@ -143,3 +145,12 @@ async def upload_profile_pic(
         raise HTTPException(status_code=400, detail="Field not updated")
 
     return {"message": "Field updated successfully"}
+
+def send_my_email():
+    print("Implementing background task")
+
+@router.post("/email", response_description="Send Contact email")
+async def send_contact_email(send_email: BackgroundTasks, contactinfo: ContactForm = Body(...)):
+    received_info = contactinfo.model_dump()
+    send_email.add_task(send_my_email)
+    return ({"message": "Message sent!, I will get back to you as soon as possible"})

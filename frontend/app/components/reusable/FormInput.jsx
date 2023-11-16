@@ -4,6 +4,7 @@ const FormInput = ({
 	inputType,
 	inputId,
 	inputName,
+	setValue,
 	placeholderText,
 	ariaLabelName,
 }) => {
@@ -20,6 +21,7 @@ const FormInput = ({
 				type={inputType}
 				id={inputId}
 				name={inputName}
+				onChange={(e) => setValue(e.target.value)}
 				placeholder={placeholderText}
 				aria-label={ariaLabelName}
 				required
